@@ -9,13 +9,18 @@
 	<body>
 		<%- include('../partials/nav.ejs') %>
 		<h3>Imágenes subidas</h3>
-		<div class="gallery">
+		<div class="container d-flex">
 			<% images.forEach( (image)=> { %>
-				<div class="picture">
-					<h4><%= image.title %> - <%= image.date %> </h4>
-					<img src="<%= image.urlimagen %>" alt="<%= image.title %>">
-				</div>
+			<div class="card m-2" style="width: 18rem">
+				<h4><%= image.titulo.toUpperCase() %> - <%= image.date %></h4>
+				<img
+					class="card-img-top"
+					style="height: 200px"
+					src="<%= image.urlimagen %>"
+					alt="<%= image.titulo %>"
+				/>
+			</div>
+			<% }) %>
 		</div>
-		<% }) %>
 	</body>
 </html>
