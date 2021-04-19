@@ -1,0 +1,11 @@
+.nav-item:hover {
+	background-color: darkgray;
+	font-weight: bold;
+}
+
+.form {
+	max-width: 500px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
