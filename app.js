@@ -4,29 +4,24 @@ const BBDD = [
 			'https://i.picsum.photos/id/237/536/354.jpg?hmac=i0yVXW1ORpyCZpQ-CknuyV-jbtU7_x9EBQVhvT5aRr0',
 		date: '2020-04-18',
 		titulo: 'Black dog',
+		color: [ 42, 35, 32 ]
 	},
 	{
 		urlimagen:
 			'https://i.picsum.photos/id/490/200/300.jpg?hmac=8hYDsOwzzMCthBMYMN9bM6POtrJfVAmsvamM2oOEiF4',
 		date: '2021-04-19',
 		titulo: 'Bol',
+		color: [43, 34, 28]
 	},
 ];
 
 let BBDDsorted = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-const color = require('img-color');
+const ColorThief = require('colorthief');
 
-let url =
-	'https://i.picsum.photos/id/490/200/300.jpg?hmac=8hYDsOwzzMCthBMYMN9bM6POtrJfVAmsvamM2oOEiF4';
 
-color
-	.getDominantColor(url)
-	.then(json => console.log(json))
-	.catch(err => console.error(err));
 
-const value = color.getDominantColor(url);
-console.log(value);
+
 
 const express = require('express');
 const app = express();
@@ -45,18 +40,29 @@ app.get('/add-image', (req, res) => {
 });
 
 app.post('/add-image', (req, res) => {
-	if (!urlExist(req.body.urlimagen)) {
-		const image = {
-			urlimagen: req.body.urlimagen,
-			date: req.body.date,
-			titulo: req.body.titulo,
-		};
+	if (urlExist(req.body.urlimagen)) {
+		res.send('This URL already exists');
+		return
+	}
+	const image = {
+		urlimagen: req.body.urlimagen,
+		date: req.body.date,
+		titulo: req.body.titulo,
+
+	};
+
+	ColorThief.getColor(image.urlimagen)
+	.then(color => { image.color =color })
+	.then( () => {
 		BBDD.push(image);
 		BBDDSorted = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
 		res.redirect('/');
-		return;
-	}
-	res.send('This URL already exists');
+	})
+	.catch(err => { console.log(err) })
+
+	
+	
+	
 });
 
 app.listen(3000);
