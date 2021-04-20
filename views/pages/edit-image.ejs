@@ -9,10 +9,10 @@
 	</head>
 	<body>
 		<%- include('../partials/nav.ejs') %>
-		<form class="form" method="POST" action="/add-image">
+		<form class="form" method="POST" action="/images/edit/<%=image.id%>">
 			<div class="mb-3">
 				<label for="titulo" class="form-label">Titulo</label>
-				<input type="input" class="form-control" id="titulo" name="titulo" maxlength="10" />
+				<input type="input" class="form-control" id="titulo" name="titulo" maxlength="10" value="<%=image.titulo%>" />
 			</div>
 			<div class="mb-3">
 				<label for="start">Fecha:</label>
@@ -20,21 +20,20 @@
 					type="date"
 					id="date"
 					name="date"
-					value="2021-04-19"
 					min="2020-01-01"
 					max="2025-12-31"
+          value="<%=image.date%>"
 				/>
 			</div>
 			<div class="mb-3">
-				<label for="urlimagen" class="form-label">Url de la imagen</label>
-				<input
-					type="url"
-					class="form-control"
-					id="urlimagen"
-					name="urlimagen"
+        <img
+					class="card-img-top"
+					style="height: 200px"
+					src="<%= image.urlimagen %>"
+					alt="<%= image.titulo %>"
 				/>
 			</div>
-			<button type="submit" class="btn btn-primary">Enviar</button>
+			<button type="submit" class="btn btn-primary">Guardar</button>
 		</form>
 	</body>
 </html>

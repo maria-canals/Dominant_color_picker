@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
 
-const BBDD = [
+let BBDD = [
 	{
 		urlimagen:
 			'https://i.picsum.photos/id/237/536/354.jpg?hmac=i0yVXW1ORpyCZpQ-CknuyV-jbtU7_x9EBQVhvT5aRr0',
@@ -19,7 +19,7 @@ const BBDD = [
 	},
 ];
 
-let BBDDsorted = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
+BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
 
 const { getColorFromURL } = require('color-thief-node');
 
@@ -32,13 +32,32 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-	res.render('pages/index', { images: BBDDsorted });
+	res.render('pages/index', { images: BBDD });
 });
 
 app.get('/add-image', (req, res) => {
 	res.render('pages/add-image');
 });
 
+app.get('/images/delete/:id', (req, res) => {
+	deleteImage(req.params.id)
+	res.redirect('/');
+	
+})
+
+app.get('/images/edit/:id', (req, res) => {
+	let image = BBDD.find( element => element.id == req.params.id)
+	res.render('pages/edit-image' , {image: image});
+	
+})
+
+app.post('/images/edit/:id', (req, res) => {
+	let index = BBDD.findIndex( element => element.id == req.params.id)
+	BBDD[index].date = req.body.date;
+	BBDD[index].titulo = req.body.titulo
+	res.redirect('/');
+	
+})
 app.post('/add-image', (req, res) => {
 	if (urlExist(req.body.urlimagen)) {
 		res.send('This URL already exists');
@@ -55,7 +74,7 @@ app.post('/add-image', (req, res) => {
 		const dominantColor = await getColorFromURL(image.urlimagen);
 		image.color = dominantColor;
 		BBDD.push(image);
-		BBDDSorted = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
+		BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
 		res.redirect('/');
 	})();
 });
@@ -65,4 +84,9 @@ app.listen(3000);
 function urlExist(url) {
 	var compare = element => element.urlimagen == url;
 	return BBDD.some(compare);
+}
+
+function deleteImage(imageId) {
+	let deleteIndex = BBDD.findIndex(element => element.id == imageId);
+	BBDD.splice(deleteIndex, 1);
 }
