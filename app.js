@@ -40,24 +40,21 @@ app.get('/add-image', (req, res) => {
 });
 
 app.get('/images/delete/:id', (req, res) => {
-	deleteImage(req.params.id)
+	deleteImage(req.params.id);
 	res.redirect('/');
-	
-})
+});
 
 app.get('/images/edit/:id', (req, res) => {
-	let image = BBDD.find( element => element.id == req.params.id)
-	res.render('pages/edit-image' , {image: image});
-	
-})
+	let image = BBDD.find(element => element.id == req.params.id);
+	res.render('pages/edit-image', { image: image });
+});
 
 app.post('/images/edit/:id', (req, res) => {
-	let index = BBDD.findIndex( element => element.id == req.params.id)
+	let index = BBDD.findIndex(element => element.id == req.params.id);
 	BBDD[index].date = req.body.date;
-	BBDD[index].titulo = req.body.titulo
+	BBDD[index].titulo = req.body.titulo;
 	res.redirect('/');
-	
-})
+});
 app.post('/add-image', (req, res) => {
 	if (urlExist(req.body.urlimagen)) {
 		res.send('This URL already exists');
@@ -81,12 +78,12 @@ app.post('/add-image', (req, res) => {
 
 app.listen(3000);
 
-function urlExist(url) {
-	var compare = element => element.urlimagen == url;
+const urlExist = url => {
+	const compare = element => element.urlimagen == url;
 	return BBDD.some(compare);
-}
+};
 
-function deleteImage(imageId) {
-	let deleteIndex = BBDD.findIndex(element => element.id == imageId);
+const deleteImage = imageId => {
+	const deleteIndex = BBDD.findIndex(element => element.id == imageId);
 	BBDD.splice(deleteIndex, 1);
-}
+};

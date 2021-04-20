@@ -4,29 +4,81 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script
+			src="https://kit.fontawesome.com/ff55efd140.js"
+			crossorigin="anonymous"
+		></script>
 		<title>Mostrar imágenes</title>
 	</head>
 	<body>
 		<%- include('../partials/nav.ejs') %>
-		<h3>Imágenes subidas</h3>
-		<div class="container d-flex">
-			<% images.forEach( (image)=> { %>
-			<div class="card m-2" style="width: 18rem">
-				<a class="btn btn-danger btn-delete" href="/images/delete/<%=image.id%>" role="button">X</a>
-				<a class="btn btn-primary " href="/images/edit/<%=image.id%>" role="button">Edit</a>
-				<h4><%= image.titulo.toUpperCase() %> - <%= image.date %></h4>
-				<img
-					class="card-img-top"
-					style="height: 200px"
-					src="<%= image.urlimagen %>"
-					alt="<%= image.titulo %>"
-				/>
-				<h4 style="background-color: rgb(<%= image.color %>)">
-					<%= image.color %>
-				</h4>
+		<div class="px-4 pt-5 my-4 text-center border-bottom">
+			<h1 class="display-4 fw-bold">Your images</h1>
+			<div class="col-lg-6 mx-auto">
+				<div
+					class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5"
+				></div>
 			</div>
-			<% }) %>
+		</div>
+		<div class="container mb-4">
+			<div class="row">
+				<% images.forEach( (image)=> { %>
+				<div class="col">
+					<div
+						class="card p-2 m-2 text-center"
+						style="width: 18rem"
+						id="<%= image.id %>"
+					>
+						<h4><%= image.titulo.toUpperCase() %></h4>
+						<h6 class="small"><%= image.date %></h6>
+						<img
+							class="card-img-top"
+							style="height: 200px"
+							src="<%= image.urlimagen %>"
+							alt="<%= image.titulo %>"
+						/>
+						<h5 class="p-2" style="background-color: rgb(<%= image.color %>)">
+							(<%= image.color %>)
+						</h5>
+						<div
+							id="<%= image.id %>"
+							class="controls d-flex flex-row justify-content-evenly m-2 d-none"
+						>
+							<a
+								class="btn btn-control btn-bg"
+								href="/images/delete/<%=image.id%>"
+								role="button"
+								><i class="fas fa-trash"></i>
+							</a>
+							<a
+								class="btn btn-control btn-bg"
+								href="/images/edit/<%=image.id%>"
+								role="button"
+								><i class="fas fa-pencil-alt"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				<% }) %>
+			</div>
 		</div>
 	</body>
+	<script>
+		const cards = document.querySelectorAll('.card');
+		cards.forEach(card =>
+			card.addEventListener('click', e => {
+				if (e.target.id) {
+					console.log(e.target.id);
+				} else {
+					console.log(e.target.parentNode.id);
+				}
+				const controlsDIV = document.querySelectorAll('.controls');
+				for (const div of controlsDIV) {
+					if (div.id == e.target.parentNode.id) {
+						div.classList.replace('d-none', 'd-block');
+					}
+				}
+			})
+		);
+	</script>
 </html>
-

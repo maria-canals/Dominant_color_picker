@@ -1,16 +1,46 @@
 .nav-item:hover {
-	background-color: darkgray;
-	font-weight: bold;
+	background-color: rgb(218, 152, 163);
+	font-weight: bolder;
 }
 
-.form {
-	max-width: 500px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+.btn-control {
+	width: 40%;
 }
 
-.btn-delete {
-	border-radius: 50px;
-	width: 45px;
+.btn-bg {
+	background-image: transparent;
+}
+
+.gradient {
+	background-image: linear-gradient(
+		to right,
+		#fff9fa,
+		#f6ecee,
+		#eddfe1,
+		#e5d3d5,
+		#dcc6c9,
+		#d5bec1,
+		#cfb6b9,
+		#c8aeb1,
+		#c1a9ab,
+		#baa4a5,
+		#b39fa0,
+		#ac9a9a
+	);
+}
+
+@media (min-width: 768px) {
+	.form {
+		min-width: 400px;
+		max-width: 600px;
+	}
+}
+
+.form-control,
+input[type='date'] {
+	border: 1px rgb(97, 31, 31) solid;
+}
+
+input[type='date'] {
+	padding: 5px;
 }

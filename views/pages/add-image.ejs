@@ -4,37 +4,59 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script
+			src="https://kit.fontawesome.com/ff55efd140.js"
+			crossorigin="anonymous"
+		></script>
 		<title>Añadir imagen</title>
-
 	</head>
 	<body>
 		<%- include('../partials/nav.ejs') %>
-		<form class="form" method="POST" action="/add-image">
-			<div class="mb-3">
-				<label for="titulo" class="form-label">Titulo</label>
-				<input type="input" class="form-control" id="titulo" name="titulo" maxlength="10" />
+		<div class="px-4 pt-5 my-4 text-center border-bottom">
+			<h1 class="display-4 fw-bold">Add an image</h1>
+			<div class="col-lg-6 mx-auto">
+				<div
+					class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5"
+				></div>
 			</div>
-			<div class="mb-3">
-				<label for="start">Fecha:</label>
-				<input
-					type="date"
-					id="date"
-					name="date"
-					value="2021-04-19"
-					min="2020-01-01"
-					max="2025-12-31"
-				/>
-			</div>
-			<div class="mb-3">
-				<label for="urlimagen" class="form-label">Url de la imagen</label>
-				<input
-					type="url"
-					class="form-control"
-					id="urlimagen"
-					name="urlimagen"
-				/>
-			</div>
-			<button type="submit" class="btn btn-primary">Enviar</button>
-		</form>
+		</div>
+		<div class="container d-flex align-items-center justify-content-center">
+			<form class="form mb-3" method="POST" action="/add-image">
+				<div class="mb-3">
+					<label for="titulo" class="form-label">Title</label>
+					<input
+						type="input"
+						class="form-control"
+						id="titulo"
+						name="titulo"
+						maxlength="10"
+					/>
+				</div>
+				<div class="mb-3">
+					<label for="start" class="mb-2">Date</label></br>
+					<input
+						type="date"
+						id="date"
+						name="date"
+						value="2021-04-19"
+						min="2020-01-01"
+						max="2025-12-31"
+					/>
+				</div>
+				<div class="mb-3">
+					<label for="urlimagen" class="form-label">Image URL</label>
+					<input
+						type="url"
+						class="form-control"
+						id="urlimagen"
+						name="urlimagen"
+					/>
+				</div>
+				<button type="submit" class="btn fw-bold">
+					SEND&nbsp;<i class="fas fa-paper-plane"></i>
+
+				</button>
+			</form>
+		</div>
 	</body>
 </html>
