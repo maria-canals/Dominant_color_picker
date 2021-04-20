@@ -12,6 +12,13 @@
 		<div class="container d-flex">
 			<% images.forEach( (image)=> { %>
 			<div class="card m-2" style="width: 18rem">
+				<button
+					id="<%=image.id%>"
+					type="button"
+					class="btn btn-danger btn-delete"
+				>
+					X
+				</button>
 				<h4><%= image.titulo.toUpperCase() %> - <%= image.date %></h4>
 				<img
 					class="card-img-top"
@@ -19,9 +26,20 @@
 					src="<%= image.urlimagen %>"
 					alt="<%= image.titulo %>"
 				/>
-				<h4 style="background-color:rgb(<%= image.color %>)"><%= image.color %></h4>
+				<h4 style="background-color: rgb(<%= image.color %>)">
+					<%= image.color %>
+				</h4>
 			</div>
 			<% }) %>
 		</div>
 	</body>
 </html>
+<script>
+	const deleteButton = document.querySelectorAll('.btn-delete');
+	deleteButton.forEach(btn =>
+		btn.addEventListener('click', () => {
+			const imageId = btn.getAttribute('id');
+			console.log(imageId);
+		})
+	);
+</script>
