@@ -40,10 +40,7 @@
 						<h5 class="p-2" style="background-color: rgb(<%= image.color %>); color:<%= image.text %>">
 							(<%= image.color %>)
 						</h5>
-						<div
-							id="<%= image.id %>"
-							class="controls d-flex flex-row justify-content-evenly m-2 d-none"
-						>
+						<div id="<%= image.id %>" class="controls m-2">
 							<a
 								class="btn btn-control btn-bg"
 								href="/images/delete/<%=image.id%>"
@@ -67,11 +64,7 @@
 		const cards = document.querySelectorAll('.card');
 		cards.forEach(card =>
 			card.addEventListener('click', e => {
-				if (e.target.id) {
-					console.log(e.target.id);
-				} else {
-					console.log(e.target.parentNode.id);
-				}
+				card.classList.toggle('visibility');
 				const controlsDIV = document.querySelectorAll('.controls');
 				for (const div of controlsDIV) {
 					if (div.id == e.target.parentNode.id) {
