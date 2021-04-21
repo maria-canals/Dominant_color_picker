@@ -8,6 +8,7 @@ let BBDD = [
 		titulo: 'Black dog',
 		color: [42, 35, 32],
 		id: nanoid(),
+		text: "#FFFFFF"
 	},
 	{
 		urlimagen:
@@ -16,10 +17,13 @@ let BBDD = [
 		titulo: 'Bol',
 		color: [43, 34, 28],
 		id: nanoid(),
+		text: "#FFFFFF"
 	},
 ];
 
 BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const { contrastColor } = require('contrast-color');
 
 const { getColorFromURL } = require('color-thief-node');
 
@@ -53,6 +57,7 @@ app.post('/images/edit/:id', (req, res) => {
 	let index = BBDD.findIndex(element => element.id == req.params.id);
 	BBDD[index].date = req.body.date;
 	BBDD[index].titulo = req.body.titulo;
+	BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
 	res.redirect('/');
 });
 app.post('/add-image', (req, res) => {
@@ -70,6 +75,7 @@ app.post('/add-image', (req, res) => {
 	(async () => {
 		const dominantColor = await getColorFromURL(image.urlimagen);
 		image.color = dominantColor;
+		image.text = contrastColor({ bgColor: `rgb(${dominantColor})` });
 		BBDD.push(image);
 		BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
 		res.redirect('/');
