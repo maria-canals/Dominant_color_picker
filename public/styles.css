@@ -1,6 +1,25 @@
-.nav-item:hover {
-	background-color: rgb(218, 152, 163);
-	font-weight: bolder;
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--display: none;
+	--flex-direction: none;
+	--justify-content: none;
+}
+
+.visibility {
+	--display: flex;
+	--flex-direction: row;
+	--justify-content: space-evenly;
+}
+
+.controls {
+	display: var(--display);
+	flex-direction: var(--flex-direction);
+	justify-content: var(--justify-content);
 }
 
 .btn-control {
@@ -29,18 +48,29 @@
 	);
 }
 
+.form-control,
+input[type='date'] {
+	border: 1px rgb(97, 31, 31) solid;
+	border-radius: 0.25rem;
+}
+
+input[type='date'] {
+	padding: 5px;
+	width: 100%;
+}
+
+.card:hover {
+	cursor: pointer;
+}
+
+.nav-item:hover {
+	background-color: rgb(218, 152, 163);
+	font-weight: bolder;
+}
+
 @media (min-width: 768px) {
 	.form {
 		min-width: 400px;
 		max-width: 600px;
 	}
-}
-
-.form-control,
-input[type='date'] {
-	border: 1px rgb(97, 31, 31) solid;
-}
-
-input[type='date'] {
-	padding: 5px;
 }
