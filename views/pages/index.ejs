@@ -11,8 +11,8 @@
 		<title>Mostrar imágenes</title>
 	</head>
 	<body>
-		<%- include('../partials/nav.ejs') %>
-		<div class="px-4 pt-5 my-4 text-center border-bottom">
+		<%- include('../includes/nav.ejs') %>
+		<div class="px-4 pt-5 my-2 text-center border-bottom">
 			<h1 class="display-4 fw-bold">Your images</h1>
 			<div class="col-lg-6 mx-auto">
 				<div
@@ -20,7 +20,9 @@
 				></div>
 			</div>
 		</div>
-		<div class="container mb-4">
+		<div
+			class="container mb-4 d-flex flex-wrap align-items-center justify-content-center"
+		>
 			<div class="row">
 				<% images.forEach( (image)=> { %>
 				<div class="col">
@@ -29,27 +31,33 @@
 						style="width: 18rem"
 						id="<%= image.id %>"
 					>
-						<h4><%= image.titulo.toUpperCase() %></h4>
+						<h4><%= image.title.toUpperCase() %></h4>
 						<h6 class="small"><%= image.date %></h6>
 						<img
 							class="card-img-top"
 							style="height: 200px"
-							src="<%= image.urlimagen %>"
-							alt="<%= image.titulo %>"
+							src="<%= image.url %>"
+							alt="<%= image.title %>"
 						/>
-						<h5 class="p-2" style="background-color: rgb(<%= image.color %>); color:<%= image.text %>">
-							(<%= image.color %>)
+						<h5
+							class="p-2"
+							style="
+								background-color: rgb(<%= image.dominantColor %>);
+								color: <%= image.text %>;
+							"
+						>
+							(<%= image.dominantColor %>)
 						</h5>
 						<div id="<%= image.id %>" class="controls m-2">
 							<a
 								class="btn btn-control btn-bg"
-								href="/images/delete/<%=image.id%>"
+								href="/images/delete/<%=image._id%>"
 								role="button"
 								><i class="fas fa-trash"></i>
 							</a>
 							<a
 								class="btn btn-control btn-bg"
-								href="/images/edit/<%=image.id%>"
+								href="/images/edit/<%=image._id%>"
 								role="button"
 								><i class="fas fa-pencil-alt"></i>
 							</a>

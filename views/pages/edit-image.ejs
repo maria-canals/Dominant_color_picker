@@ -5,35 +5,47 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Añadir imagen</title>
-
 	</head>
 	<body>
-		<%- include('../partials/nav.ejs') %>
-		<form class="form" method="POST" action="/images/edit/<%=image.id%>">
-			<div class="mb-3">
-				<label for="titulo" class="form-label">Titulo</label>
-				<input type="input" class="form-control" id="titulo" name="titulo" maxlength="10" value="<%=image.titulo%>" />
-			</div>
-			<div class="mb-3">
-				<label for="start">Fecha:</label>
-				<input
-					type="date"
-					id="date"
-					name="date"
-					min="2020-01-01"
-					max="2025-12-31"
-          value="<%=image.date%>"
-				/>
-			</div>
-			<div class="mb-3">
-        <img
-					class="card-img-top"
-					style="height: 200px"
-					src="<%= image.urlimagen %>"
-					alt="<%= image.titulo %>"
-				/>
-			</div>
-			<button type="submit" class="btn btn-primary">Guardar</button>
-		</form>
+		<%- include('../includes/nav.ejs') %>
+		<div
+			class="cointainer d-flex d-column align-items-center justify-content-center mt-5"
+		>
+			<form class="form" method="POST" action="/images/edit/<%=image._id%>">
+				<div class="mb-3">
+					<label for="title" class="form-label">Title</label>
+					<input
+						type="input"
+						class="form-control"
+						id="title"
+						name="title"
+						maxlength="10"
+						value="<%=image.title%>"
+					/>
+				</div>
+				<div class="mb-3">
+					<label for="date">Date</label>
+					<input
+						type="date"
+						id="date"
+						name="date"
+						min="2020-01-01"
+						max="2025-12-31"
+						value="<%=image.date%>"
+					/>
+				</div>
+				<div class="mb-3 d-flex flex-column align-items-center">
+					<img
+						class="form-image self-align-center"
+						src="<%= image.url %>"
+						alt="<%= image.title %>"
+					/>
+				</div>
+				<div class="controllers d-flex flex-row justify-content-evenly">
+					<a class="btn btn-secondary" href="/" role="button">Cancel</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</form>
+		</div>
 	</body>
 </html>

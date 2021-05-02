@@ -1,95 +1,25 @@
-const { nanoid } = require('nanoid');
-
-let BBDD = [
-	{
-		urlimagen:
-			'https://i.picsum.photos/id/237/536/354.jpg?hmac=i0yVXW1ORpyCZpQ-CknuyV-jbtU7_x9EBQVhvT5aRr0',
-		date: '2020-04-18',
-		titulo: 'Black dog',
-		color: [42, 35, 32],
-		id: nanoid(),
-		text: "#FFFFFF"
-	},
-	{
-		urlimagen:
-			'https://i.picsum.photos/id/490/200/300.jpg?hmac=8hYDsOwzzMCthBMYMN9bM6POtrJfVAmsvamM2oOEiF4',
-		date: '2021-04-19',
-		titulo: 'Bol',
-		color: [43, 34, 28],
-		id: nanoid(),
-		text: "#FFFFFF"
-	},
-];
-
-BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-const { contrastColor } = require('contrast-color');
-
-const { getColorFromURL } = require('color-thief-node');
-
 const express = require('express');
+const mongoose = require('mongoose');
+
+const uri = 'mongodb+srv://root:root@cluster0.y4pfl.mongodb.net/colorPicker';
+
 const app = express();
 app.set('view engine', 'ejs');
+
+const imagesRouters = require('./routes/images');
 
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-	res.render('pages/index', { images: BBDD });
+app.use(imagesRouters);
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function () {
+	app.listen(3000);
 });
-
-app.get('/add-image', (req, res) => {
-	res.render('pages/add-image');
-});
-
-app.get('/images/delete/:id', (req, res) => {
-	deleteImage(req.params.id);
-	res.redirect('/');
-});
-
-app.get('/images/edit/:id', (req, res) => {
-	let image = BBDD.find(element => element.id == req.params.id);
-	res.render('pages/edit-image', { image: image });
-});
-
-app.post('/images/edit/:id', (req, res) => {
-	let index = BBDD.findIndex(element => element.id == req.params.id);
-	BBDD[index].date = req.body.date;
-	BBDD[index].titulo = req.body.titulo;
-	BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
-	res.redirect('/');
-});
-app.post('/add-image', (req, res) => {
-	if (urlExist(req.body.urlimagen)) {
-		res.send('This URL already exists');
-		return;
-	}
-	const image = {
-		urlimagen: req.body.urlimagen,
-		date: req.body.date,
-		titulo: req.body.titulo,
-		id: nanoid(),
-	};
-
-	(async () => {
-		const dominantColor = await getColorFromURL(image.urlimagen);
-		image.color = dominantColor;
-		image.text = contrastColor({ bgColor: `rgb(${dominantColor})` });
-		BBDD.push(image);
-		BBDD = BBDD.sort((a, b) => new Date(b.date) - new Date(a.date));
-		res.redirect('/');
-	})();
-});
-
-app.listen(3000);
-
-const urlExist = url => {
-	const compare = element => element.urlimagen == url;
-	return BBDD.some(compare);
-};
-
-const deleteImage = imageId => {
-	const deleteIndex = BBDD.findIndex(element => element.id == imageId);
-	BBDD.splice(deleteIndex, 1);
-};
