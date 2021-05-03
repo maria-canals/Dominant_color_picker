@@ -2,7 +2,7 @@ const Image = require('../models/image');
 const { contrastColor } = require('contrast-color');
 const { getColorFromURL } = require('color-thief-node');
 const { rgbToHex } = require('../utils/app.js');
-const { db } = require('../models/image');
+const fs = require('fs');
 
 exports.showMainPage = async (req, res) => {
 	const allImages = await Image.find();
@@ -12,22 +12,25 @@ exports.showMainPage = async (req, res) => {
 };
 
 exports.showFormPage = async (req, res) => {
-	res.render('pages/add-image', {
-		existsURL: 'not',
-	});
+	res.render('pages/add-image');
 };
 
 exports.postFormParge = async (req, res) => {
+	const file = req.file;
+	console.log(file);
+	const img = fs.readFileSync(req.file.path);
+	// const encode_image = img.toString('base64');
+
+	const imageFile = req.file.filename;
+	console.log(req.file);
+
 	const imageURL = req.body.imageURL;
 
-	const doesUrlExist = await Image.find({ url: imageURL });
-	console.log(doesUrlExist.length, 'existe?');
-	if (doesUrlExist.length > 0) {
-		res.render('pages/add-image', {
-			existsURL: 'yes',
-		});
-		return;
-	}
+	// const doesUrlExist = await Image.find({ url: imageURL });
+	// if (doesUrlExist.length > 0) {
+	// 	res.render('pages/add-image', { exists: 'caca' });
+	// 	return;
+	// }
 
 	const title = req.body.title;
 	const date = req.body.date;
@@ -43,10 +46,10 @@ exports.postFormParge = async (req, res) => {
 		url: imageURL,
 		dominantColor,
 		text: textColor,
+		imageFile: imageFile,
 	});
 
 	await newImage.save();
-
 	res.redirect('/');
 };
 
@@ -74,6 +77,5 @@ exports.saveEditedImage = async (req, res) => {
 	const id = req.params.id;
 
 	await Image.updateOne({ _id: id }, { $set: { title: title, date: date } });
-
 	res.redirect('/');
 };

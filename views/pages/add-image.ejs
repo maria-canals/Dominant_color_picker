@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="container d-flex align-items-center justify-content-center">
-			<form class="form mb-3" method="POST" action="/add-image">
+			<form class="form mb-3" method="POST" action="/add-image" enctype="multipart/form-data">
 				<div class="mb-3">
 					<label for="title" class="form-label">Title</label>
 					<input
@@ -54,6 +54,11 @@
 						name="imageURL"
 						required
 					/>
+					
+				</div>
+				<div class="mb-3">
+					<label for="avatar">Upload an image</label> </br>
+					<input class="mt-3" type="file" name="avatar" accept="image/*"/>
 				</div>
 				<button type="submit" class="btn fw-bold">
 					SEND&nbsp;<i class="fas fa-paper-plane"></i>
@@ -62,11 +67,7 @@
 			</form>
 		</div>
 		<div class="text-center">
-			<%if ('yes') { %>
-			<h1>This URL already exists</h1>
-			<% } else if('not'){ %>
-			<h1></h1>
-			<% } %>
+
 		</div>
 	</body>
 </html>

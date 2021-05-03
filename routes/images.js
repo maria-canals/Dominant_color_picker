@@ -1,14 +1,26 @@
 const express = require('express');
-
 const imagesController = require('../controllers/images');
-
 const router = express.Router();
-const app = express();
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, './uploads');
+	},
+	filename: function (req, file, cb) {
+		cb(null, Date.now() + '-' + file.fieldname + '.jpg');
+	},
+});
+const upload = multer({ storage: storage });
 
 router.get('/', imagesController.showMainPage);
 
 router.get('/add-image', imagesController.showFormPage);
-router.post('/add-image', imagesController.postFormParge);
+router.post(
+	'/add-image',
+	upload.single('avatar'),
+	imagesController.postFormParge
+);
 
 router.get('/images/delete/:id', imagesController.deleteImage);
 

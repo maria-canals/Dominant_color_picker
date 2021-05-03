@@ -19,6 +19,8 @@ const imageSchema = new Schema({
 	text: {
 		type: String,
 	},
+	img: { contentType: String, path: String, image: Buffer },
+	imageFile: String,
 });
 
 const Image = mongoose.model('image', imageSchema);
