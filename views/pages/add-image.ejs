@@ -66,8 +66,12 @@
 				</button>
 			</form>
 		</div>
-		<div class="text-center">
-
+		<div class="bg-danger text-center">
+			<% if (error) { %>
+				<h2>
+					<%= error %>
+				</h2>
+				<% } %>
 		</div>
 	</body>
 </html>
