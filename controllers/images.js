@@ -1,7 +1,9 @@
 const Image = require('../models/image');
 const { contrastColor } = require('contrast-color');
 const { getColorFromURL } = require('color-thief-node');
+const { getColor } = require('color-thief-node');
 const { rgbToHex } = require('../utils/app.js');
+const Canvas = require('canvas');
 
 exports.showMainPage = async (req, res) => {
 	const allImages = await Image.find();
@@ -19,61 +21,89 @@ exports.showFormPage = async (req, res) => {
 };
 
 exports.postFormParge = async (req, res) => {
-	const image = '';
-	console.log(req.file.filename);
-	if (req.file.filename == undefined) {
-		console.log('hola com estas??');
-		// image = req.file.filename;
-	} else {
-		return res.render('pages/add-image', {
-			error: 'Please upload an image',
-			path: '/pages/add-image',
-			images: null,
-		});
-	}
+	var image = '';
 	const imageURL = req.body.imageURL;
 
-	// const doesUrlExist = await Image.find({ url: imageURL });
-	const doesImageExist = await Image.find({
-		imageFile: image,
-	});
-
-	// if (doesUrlExist.length > 0) {
-	// 	return res.render('pages/add-image', {
-	// 		error: `This URL already exists.`,
-	// 		path: '/pages/add-image',
-	// 		images: null,
-	// 	});
-
-	// }
-	console.log(image);
-
-	if (doesImageExist.length > 0) {
+	if (req.file == undefined && imageURL == "") {
 		return res.render('pages/add-image', {
-			error: 'This image already exists.',
+			error: 'Please upload an image or an URL',
 			path: '/pages/add-image',
 			images: null,
 		});
+		
+	} else if (req.file != undefined && imageURL != "") {
+		return res.render('pages/add-image', {
+			error: 'Please upload an image OR an URL not both',
+			path: '/pages/add-image',
+			images: null,
+		});
+	} else if (imageURL != "") {
+		const doesUrlExist = await Image.find({ url: imageURL });
+			if (doesUrlExist.length > 0) {
+		 	return res.render('pages/add-image', {
+		 		error: `This URL already exists.`,
+		 		path: '/pages/add-image',
+		 		images: null,
+		 	})	
+		 }
+		 const dominantColor = await getColorFromURL(imageURL);
+
+		 let r, g, b;
+		 [r, g, b] = [dominantColor[0], dominantColor[1], dominantColor[2]];
+		 const color = rgbToHex(r, g, b);
+		 const textColor = contrastColor({ bgColor: color });
+	 
+		 const newImage = new Image({
+			 title: req.body.title,
+			 date: req.body.date,
+			 url: imageURL,
+			 dominantColor,
+			 text: textColor,
+			 imageFile: imageURL,
+		 });
+	 
+		 await newImage.save();
+		 res.redirect('/');
+		 
+	} else {
+		image = req.file.filename;
+		const doesImageExist = await Image.find({
+			imageFile: image,
+		});
+		if (doesImageExist.length > 0) {
+			return res.render('pages/add-image', {
+				error: 'This image already exists.',
+				path: '/pages/add-image',
+				images: null,
+			});
+		}
+
+		let img = await Canvas.loadImage("./uploads/"  + image)
+		img.width = 200;
+		img.height = 200;
+
+		const dominantColor = await getColor(img);
+		let r, g, b;
+		[r, g, b] = [dominantColor[0], dominantColor[1], dominantColor[2]];
+		const color = rgbToHex(r, g, b);
+		const textColor = contrastColor({ bgColor: color });
+		
+
+		const newImage = new Image({
+			title: req.body.title,
+			date: req.body.date,
+			url: imageURL,
+			dominantColor,
+			text: textColor,
+			imageFile: image,
+		});
+	
+		await newImage.save();
+		res.redirect('/');
+  
+	
 	}
 
-	const dominantColor = await getColorFromURL(imageURL);
-
-	let r, g, b;
-	[r, g, b] = [dominantColor[0], dominantColor[1], dominantColor[2]];
-	const color = rgbToHex(r, g, b);
-	const textColor = contrastColor({ bgColor: color });
-
-	const newImage = new Image({
-		title: req.body.title,
-		date: req.body.date,
-		url: imageURL,
-		dominantColor,
-		text: textColor,
-		imageFile: image,
-	});
-
-	await newImage.save();
-	res.redirect('/');
 };
 
 exports.deleteImage = async (req, res) => {
